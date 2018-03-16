@@ -1,0 +1,199 @@
+<html>
+
+<head>
+  <title>Photo Editor</title>
+  <link rel='stylesheet' href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- Add following jquery UI script here
+             https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
+          -->
+
+
+  <link href="https://fonts.googleapis.com/css?family=Bubblegum+Sans|Lobster|Pacifico|Comfortaa" rel="stylesheet">
+</head>
+
+<body>
+
+  <img class='logo' src='camera.png'>
+  <h1>Photo editor</h1>
+  <button class="preview-editor-btn" onclick="preview();">Preview</button>
+  <div class='container'>
+    <div class='tools' id='uploader'>
+      <h1>Choose a Dumb Photo</h1>
+      <label for="url">
+        <p>Enter the image url here:
+        <input type="text" id="url" class="textInput" placeholder="https://example.com">
+        <button class="uploadBtn">Upload</button><span class="error imglinkerror"></span>
+        </p>
+      </label>
+      <p>Or choose one of the following:</p>
+      <input type="radio" id="image1" name="image" class="imageInput" value="https://www.wallpaperbackgrounds.org/wp-content/uploads/Picture.jpg" />
+      <label for="image1">
+      <img class="thumb" src="https://www.wallpaperbackgrounds.org/wp-content/uploads/Picture.jpg" />
+      </label>
+      <input type="radio" id="image2" name="image" class="imageInput" value="https://www.wallpaperbackgrounds.org/wp-content/uploads/Picture-2.jpg" />
+      <label for="image2">
+      <img class="thumb" src="https://www.wallpaperbackgrounds.org/wp-content/uploads/Picture-2.jpg" />
+      </label>
+      <input type="radio" id="image3" name="image" class="imageInput" value="https://www.wallpaperbackgrounds.org/wp-content/uploads/Picture-3.jpg" />
+      <label for="image3">
+      <img class="thumb" src="https://www.wallpaperbackgrounds.org/wp-content/uploads/Picture-3.jpg" />
+      </label>
+    </div>
+    <div class='tools' id='editor'>
+      <label for='text'>Enter the text:</label>
+      <input type='text' id='captionInput' class='textInput'>
+
+      <label for="fontSize">Font Size:</label>
+      <input type="number" id="fontSize" class="textInput">
+
+      <label for="color">Color:</label>
+      <input type="color" id="color">
+
+      <select id="font">
+                <option style="font-family:Lobster">Lobster</option>
+                <option style="font-family:Bubblegum Sans">Bubblegun Sans</option>
+                <option style="font-family:Comfortaa">Confortaa</option>
+              </select>
+
+
+      <!-- -->
+
+
+
+      <button class="textBtn">Add text</button>
+      <!-- -->
+
+      <h1>Choose a stupid Sticker</h1>
+      <img src="s1.png" class="sticker">
+      <img src="s2.png" class="sticker">
+      <img src="s3.png" class="sticker">
+      <img src="s4.png" class="sticker">
+      <img src="s5.png" class="sticker">
+      <img src="s6.png" class="sticker">
+      <img src="s7.png" class="sticker">
+      <img src="s8.png" class="sticker">
+      <img src="s9.png" class="sticker">
+    </div>
+    <div class='canvas'>
+      <img src='placeholder.png' alt="a Horrible Image which you should never have seen anyway." id='image'>
+      <p class="caption"></p>
+    </div>
+  </div>
+
+  <script>
+    //making sure image does not get moved
+    document.getElementById('image').ondragstart = function() {
+      return false;
+    };
+
+    function testImage(url, timeoutT) {
+      return new Promise(function(resolve, reject) {
+        var timeout = timeoutT || 5000;
+        var timer, img = new Image();
+        img.onerror = img.onabort = function() {
+          clearTimeout(timer);
+          reject("Not a photo / error");
+        };
+        img.onload = function() {
+          clearTimeout(timer);
+          resolve("success");
+        };
+        timer = setTimeout(function() {
+          // reset .src to invalid URL so it stops previous
+          // loading, but doesn't trigger new load
+          img.src = "//!!!!/test.jpg";
+          reject("Timed Out - Try again");
+        }, timeout);
+        img.src = url;
+      });
+    }
+    $('#editor').hide();
+    $('.preview-editor-btn').hide();
+
+    function addImage() {
+
+      var url = $("#url").val();
+      testImage(url, 2000)
+        .then(() => {
+          console.log("success in getting image");
+          $("#image").attr("src", url);
+          $("#uploader").hide();
+          $("#editor").fadeIn(1000);
+          $(".preview-editor-btn").fadeIn(1000);
+        })
+        .catch((e) => {
+          console.error("image is not an image/or -- " + e);
+          $(".imglinkerror").html(e);
+          return;
+        });
+
+    }
+    $('.uploadBtn').click(addImage);
+
+    function pickImage() {
+      var url = $('.imageInput:checked').val();
+      $('#image').attr('src', url);
+      $('#uploader').hide();
+      $('#editor').fadeIn(1000);
+      $(".preview-editor-btn").fadeIn(1000);
+    }
+    $('.imageInput').click(pickImage);
+
+    function addText() {
+      var caption = $('#captionInput').val();
+      $('.caption').text(caption);
+      var size = $("#fontSize").val() || 50;
+      var font = $("#font").val();
+      var color = $("#color").val();
+      var textCSS = {
+        'font-size': size,
+        'margin': '-10px 0px -10px',
+        'font-family': font,
+        'color': color
+      }
+      $('.caption').css(textCSS);
+      $('.caption').draggable({
+        cursor: "crosshair",
+        containment: ".canvas",
+        opacity: 0.7
+      });
+
+
+    }
+
+    function addSticker() {
+      var sticker = $(this).attr('src');
+      $('.canvas').append(`<img src='${sticker}' class="canvasSticker">`);
+      $('.canvasSticker').draggable({
+        cursor: "crosshair",
+        containment: ".canvas",
+        opacity: 0.7
+      });
+    }
+    $(".sticker").click(addSticker);
+
+
+
+    $('.textBtn').click(addText);
+
+    function preview() {
+      if ($(".preview-editor-btn").html() == "Preview") {
+        $("#editor").hide();
+        $(".canvas").css({
+          'width': '100%'
+        });
+        $(".preview-editor-btn").html("Show Editor");
+      } else {
+        $("#editor").show();
+        $(".canvas").css({
+          'width': '650px'
+        });
+        $(".preview-editor-btn").html("Preview");
+      }
+    }
+  </script>
+</body>
+
+</html>
