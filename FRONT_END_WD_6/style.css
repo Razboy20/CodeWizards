@@ -1,0 +1,145 @@
+html{
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+button{
+    border: none;
+    outline: none;
+    border: 2px solid #fafafa;
+    background-color: #e74c3c;
+    color: #fafafa;
+    font-size: 18px;
+    font-family: 'Bubblegum Sans', cursive;
+    padding: 8px;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+
+button:active{
+    font-size: 17px;
+    border: 3px solid #fafafa;
+}
+
+h1{
+    text-align: center;
+    font-family: 'Pacifico', cursive;
+    font-weight: normal;
+    font-size: 32px;
+    margin-top: 0px;
+    color: #fff;
+}
+
+.logo{
+    text-align: center;
+    padding:0px;
+    margin: auto;
+    margin-bottom: 0px;
+    display: block;
+}
+
+input{
+    outline: none;
+    border: none;
+}
+
+.container{
+    width: 1250px;
+    margin: auto;
+    font-family: 'Bubblegum Sans', cursive;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.tools{
+    width:500px;
+    margin:auto;
+    padding:10px;
+    border-radius:10px;
+    background-color:#333333;
+    color:#fafafa;
+}
+
+
+.canvas {
+    width:650px;
+    margin:auto;
+    border:5px double white;
+    position: relative;
+}
+
+#image{
+    width:100%;
+}
+
+.textInput {
+    background-color:transparent;
+    border-bottom:2px solid white;
+    font-size:18px;
+    color:#fafafa;
+}
+
+
+.thumb {
+    width:130px;
+    margin-bottom:5px;
+    border:2px dashed #fafafa;
+    cursor:pointer;
+}
+
+
+#captionInput{
+    width:400px;
+    margin-bottom: 20px;
+}
+
+.caption{
+    position: absolute;
+    top:20px;
+    left:50px;
+    font-size:30px;
+}
+
+.error {
+   font-style: italic;
+   color: red;
+   font-size: 11px;
+}
+#fontSize {
+  width:50px;
+}
+select {
+  width:170px;
+  border:none;
+  background-color:white;
+  padding: 5px;
+  margin 10px;
+}
+
+.sticker {
+  margin:5px;
+  padding:5px;
+  cursor:pointer;
+  border: 2px dashed #333333;
+}
+
+
+.sticker:hover {
+  border-color:#fafafa;
+}
+
+.canvasSticker {
+  top:50px;
+  position: absolute;
+}
+
+.preview-editor-btn {
+  top:50px;
+  left:50px;
+  position: absolute;
+  width:120px;
+}
