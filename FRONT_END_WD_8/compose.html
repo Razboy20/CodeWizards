@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia|Bubblegum+Sans" rel="stylesheet">
+        <link rel='stylesheet' href="style.css">
+    </head>
+    <body>
+        <audio id="sound_drop" src="drop.mp3" preload></audio>
+        <audio id="sound_kick4" src="kick4.mp3" preload></audio>
+        <audio id="sound_snare1" src="snare1.mp3" preload></audio>
+        <script>
+          /*
+          Exercise 1: Create an object containing id of audio tags.
+
+          Exercise 2: Play the drop audio when pressed any keyboard key.
+
+          Exercise 3: Use bracket notation instead of dot notation.
+
+          Exercise 4: Change background color of page when audio is played.
+                      Also add box-shadow and border to the white circle.
+
+          Exercise 5: Change background color and other styles only when an audio is played.
+          */
+          var music = {
+            'drop':'sound_drop',
+            'kick':'sound_kick4',
+            'snare':'sound_snare1'
+          };
+
+          var keys = {
+            'ArrowUp':'drop'
+          }
+          function checkKey(event) {
+            var keyPressed = event.originalEvent.code;
+            console.log(keyPressed);
+            var id = music[keys[keyPressed]];
+            (id==undefined) ? console.log('invalid note') : $("#"+id)[0].cloneNode().play();
+          }
+          $(document).keydown(checkKey);
+
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    text-align: center;
+    background-image: url('bg2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+h1{
+    font-size: 60px;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-weight: normal;
+    width:250px;
+    color:#16a085;
+}
