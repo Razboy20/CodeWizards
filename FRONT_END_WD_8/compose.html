@@ -1,45 +1,142 @@
 <html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia|Bubblegum+Sans" rel="stylesheet">
-        <link rel='stylesheet' href="style.css">
-    </head>
-    <body>
-        <audio id="sound_drop" src="drop.mp3" preload></audio>
-        <audio id="sound_kick4" src="kick4.mp3" preload></audio>
-        <audio id="sound_snare1" src="snare1.mp3" preload></audio>
-        <script>
-          /*
-          Exercise 1: Create an object containing id of audio tags.
 
-          Exercise 2: Play the drop audio when pressed any keyboard key.
+<head>
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia|Bubblegum+Sans" rel="stylesheet">
+  <link rel='stylesheet' href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
 
-          Exercise 3: Use bracket notation instead of dot notation.
-
-          Exercise 4: Change background color of page when audio is played.
-                      Also add box-shadow and border to the white circle.
-
-          Exercise 5: Change background color and other styles only when an audio is played.
-          */
-          var music = {
-            'drop':'sound_drop',
-            'kick':'sound_kick4',
-            'snare':'sound_snare1'
-          };
-
-          var keys = {
-            'ArrowUp':'drop'
-          }
-          function checkKey(event) {
-            var keyPressed = event.originalEvent.code;
-            console.log(keyPressed);
-            var id = music[keys[keyPressed]];
-            (id==undefined) ? console.log('invalid note') : $("#"+id)[0].cloneNode().play();
-          }
-          $(document).keydown(checkKey);
+<body>
+  <audio id="sound_drop" src="drop.mp3" preload></audio>
+  <audio id="sound_kick4" src="kick4.mp3" preload></audio>
+  <audio id="sound_snare1" src="snare1.mp3" preload></audio>
 
 
+  <div class="overlay">
+    <div class="circle">
+      <h1>Drums And Piano</h1>
+    </div>
+  </div>
+  <div class="recording">
+    <p>•</p>
+  </div>
+  <div class="playing">
+    <p>•</p>
+  </div>
+  <script>
+    /*
+                Exercise 1: Create an object containing id of audio tags.
 
-        </script>
-    </body>
+                Exercise 2: Play the drop audio when pressed any keyboard key.
+
+                Exercise 3: Use bracket notation instead of dot notation.
+
+                Exercise 4: Change background color of page when audio is played.
+                            Also add box-shadow and border to the white circle.
+
+                Exercise 5: Change background color and other styles only when an audio is played.
+                */
+
+    var playing = false;
+    var i = 0;
+    $('.recording').hide();
+    $('.playing').hide();
+    var music = {
+      'drop': 'sound_drop',
+      'kick': 'sound_kick4',
+      'snare': 'sound_snare1'
+    };
+
+    var keys = {
+      'KeyA': 'drop',
+      'KeyS': 'kick',
+      'KeyW': 'snare',
+      'timeCount': 0,
+      'rpStarted': false,
+      'times': {
+        'drop': 0.15,
+        'kick': 0.05,
+        'snare': 0
+      },
+      'recording': [],
+    }
+    var timeCountInterval;
+
+    function endRepeat() {
+      keys.rpStarted = false;
+      $(".recording").hide();
+      clearInterval(timeCountInterval);
+      keys.timeCount = 0;
+      //sending to console
+      console.log('Ended recording session.');
+    }
+
+    function startRepeat() {
+      keys.recording = [];
+      keys.rpStarted = true;
+      $(".recording").show();
+      setTimeout(endRepeat, 7000);
+      timeCountInterval = setInterval(function() {
+        keys.timeCount += 7
+      }, 5);
+      //sending to console
+      console.log('Starting recording...');
+    }
+
+    function recordKey(id, name) {
+      keys.recording.push({
+        'time': keys.timeCount,
+        'noteid': id,
+        'name': name
+      });
+      console.log("Recorded note: " + id);
+    };
+
+    function playBack() {
+      playing = true;
+      $('.playing').show();
+      for (var a = 0; a < keys.recording.length; a++) {
+        var i = 0;
+        setTimeout(function() {
+          $("#" + keys.recording[i].noteid)[0].cloneNode().addEventListener('canplaythrough', function() {
+
+            //NEED HELP WITH THIS WHYYYY (this.currentTime < keys.times[keys[keyPressed]]) && this.currentTime = keys.times[keys[keyPressed]];
+            if (this.currentTime + 1 < keys.times[keys.recording[i].name]) this.currentTime = keys.times[keys.recording[i].name];
+            this.play();
+          });
+          i++;
+        }, keys.recording[a].time);
+      }
+      setTimeout(() => {
+        playing = false
+        $('.playing').hide();
+      }, 7500);
+    }
+
+    function checkKey(event) {
+      //getting key pressed from 'event'
+      if (playing == false) {
+        var keyPressed = event.originalEvent.code;
+        console.log(keyPressed);
+
+        //if repeat button pressed start repeating (need HELP)
+        (keyPressed != "KeyR") ? '' : (keys.rpStarted === false) ? startRepeat(): console.error("Repeat already started.");
+        //checking if recording in progress; if not playing audio
+        (keyPressed != "KeyP") ? '' : (keys.rpStarted === false) ? playBack(): console.error("Recording in progress, cannot play!");
+
+        //checking if the key pressed is a note
+        var id = music[keys[keyPressed]];
+        (id == undefined) ? console.log('invalid note'): $("#" + id)[0].cloneNode().addEventListener('canplaythrough', function() {
+
+          //NEED HELP WITH THIS WHYYYY (this.currentTime < keys.times[keys[keyPressed]]) && this.currentTime = keys.times[keys[keyPressed]];
+          if (this.currentTime + 1 < keys.times[keys[keyPressed]]) this.currentTime = keys.times[keys[keyPressed]];
+          this.play();
+          (keys.rpStarted === true) && recordKey(id, keys[keyPressed]);
+        });
+      }
+    }
+    $(document).keydown(checkKey);
+  </script>
+</body>
+
 </html>
