@@ -101,7 +101,7 @@
           $("#" + keys.recording[i].noteid)[0].cloneNode().addEventListener('canplaythrough', function() {
 
             //NEED HELP WITH THIS WHYYYY (this.currentTime < keys.times[keys[keyPressed]]) && this.currentTime = keys.times[keys[keyPressed]];
-            if (this.currentTime + 1 < keys.times[keys.recording[i].name]) this.currentTime = keys.times[keys.recording[i].name];
+            if (this.currentTime < keys.times[keys.recording[i].name]) this.currentTime = keys.times[keys.recording[i].name];
             this.play();
           });
           i++;
