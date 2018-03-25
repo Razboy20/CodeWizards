@@ -4,6 +4,7 @@
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia|Bubblegum+Sans" rel="stylesheet">
   <link rel='stylesheet' href="style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <title>Compositions For Life</title>
 </head>
 
 <body>
@@ -25,17 +26,17 @@
   </div>
   <script>
     /*
-                Exercise 1: Create an object containing id of audio tags.
+            Exercise 1: Create an object containing id of audio tags.
 
-                Exercise 2: Play the drop audio when pressed any keyboard key.
+            Exercise 2: Play the drop audio when pressed any keyboard key.
 
-                Exercise 3: Use bracket notation instead of dot notation.
+            Exercise 3: Use bracket notation instead of dot notation.
 
-                Exercise 4: Change background color of page when audio is played.
-                            Also add box-shadow and border to the white circle.
+            Exercise 4: Change background color of page when audio is played.
+                        Also add box-shadow and border to the white circle.
 
-                Exercise 5: Change background color and other styles only when an audio is played.
-                */
+            Exercise 5: Change background color and other styles only when an audio is played.
+            */
 
     var playing = false;
     var i = 0;
@@ -53,34 +54,32 @@
       'KeyW': 'snare',
       'timeCount': 0,
       'rpStarted': false,
-      'times': {
-        'drop': 0.15,
+      'times': { //times to trim off the beginning of the sound files
+        'drop': 0.01,
         'kick': 0.05,
-        'snare': 0
+        'snare': 0.08
       },
       'recording': [],
     }
-    var timeCountInterval;
+    var timeCountInterval; //will store .setInterval for incrementing keys.timeCount
 
-    function endRepeat() {
+    function startRecord() {
+      keys.recording = [];
+      keys.rpStarted = true;
+      $(".recording").show();
+      setTimeout(endRecord, 7000);
+      timeCountInterval = setInterval(function() { //starting counting for playback
+        keys.timeCount += 5
+      }, 5);
+      console.log('Starting recording...');
+    }
+
+    function endRecord() {
       keys.rpStarted = false;
       $(".recording").hide();
       clearInterval(timeCountInterval);
       keys.timeCount = 0;
-      //sending to console
       console.log('Ended recording session.');
-    }
-
-    function startRepeat() {
-      keys.recording = [];
-      keys.rpStarted = true;
-      $(".recording").show();
-      setTimeout(endRepeat, 7000);
-      timeCountInterval = setInterval(function() {
-        keys.timeCount += 7
-      }, 7);
-      //sending to console
-      console.log('Starting recording...');
     }
 
     function recordKey(id, name) {
@@ -96,15 +95,20 @@
       playing = true;
       $('.playing').show();
       for (var a = 0; a < keys.recording.length; a++) {
-        var i = 0;
+        var i = -1;
         setTimeout(function() {
+          i++;
           $("#" + keys.recording[i].noteid)[0].cloneNode().addEventListener('canplaythrough', function() {
 
             //NEED HELP WITH THIS WHYYYY (this.currentTime < keys.times[keys[keyPressed]]) && this.currentTime = keys.times[keys[keyPressed]];
-            if (this.currentTime < keys.times[keys.recording[i].name]) this.currentTime = keys.times[keys.recording[i].name];
-            this.play();
+            //if (this.currentTime < keys.times[keys.recording[i].name]) this.currentTime = keys.times[keys.recording[i].name];
+            //this.play();
+            if (this.currentTime == 0) {
+              this.currentTime = keys.times[keys.recording[i].name];
+              this.play();
+              console.log(this.currentTime + ' ; ' + keys.times[keys.recording[i].name] + ' ; ' + keys.recording[i].name);
+            }
           });
-          i++;
         }, keys.recording[a].time);
       }
       setTimeout(() => {
@@ -120,19 +124,21 @@
         console.log(keyPressed);
 
         //if repeat button pressed start repeating (need HELP)
-        (keyPressed != "KeyR") ? '' : (keys.rpStarted === false) ? startRepeat(): console.error("Repeat already started.");
+        (keyPressed != "KeyR") ? '' : (keys.rpStarted === false) ? startRecord(): console.error("Recording already started.");
         //checking if recording in progress; if not playing audio
         (keyPressed != "KeyP") ? '' : (keys.rpStarted === false) ? playBack(): console.error("Recording in progress, cannot play!");
 
         //checking if the key pressed is a note
         var id = music[keys[keyPressed]];
-        (id == undefined) ? console.log('invalid note'): $("#" + id)[0].cloneNode().addEventListener('canplaythrough', function() {
-
-          //NEED HELP WITH THIS WHYYYY (this.currentTime < keys.times[keys[keyPressed]]) && this.currentTime = keys.times[keys[keyPressed]];
-          if (this.currentTime + 1 < keys.times[keys[keyPressed]]) this.currentTime = keys.times[keys[keyPressed]];
-          this.play();
-          (keys.rpStarted === true) && recordKey(id, keys[keyPressed]);
-        });
+        if (id != undefined) {
+          $("#" + id)[0].cloneNode().addEventListener('canplaythrough', function() {
+            if (this.currentTime == 0) {
+              this.currentTime = keys.times[keys[keyPressed]];
+              this.play();
+              if (keys.rpStarted === true) recordKey(id, keys[keyPressed]);
+            }
+          });
+        }
       }
     }
     $(document).keydown(checkKey);
