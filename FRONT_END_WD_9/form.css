@@ -1,0 +1,82 @@
+body {
+    background:url('bodybg.jpg');
+    background-size:cover;
+    font-family: 'Permanent Marker', sans-serif;
+}
+.card{
+    width:800px;
+    height:400px;
+    margin: auto;
+    background: lightyellow;
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow:2px 2px 3px rgba(0,0,0,0.5);
+}
+
+.cardImage{
+    width: 390px;
+    height: 400px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cardContent{
+    width:400px;
+    margin: auto;
+}
+
+h1{
+    font-weight: normal;
+    font-family: 'Passion One', cursive;
+    font-size: 64px;
+    color: #c0392b;
+}
+
+h2 {
+    font-weight: normal;
+    font-family: 'Mystery Quest', cursive;
+}
+
+h3 {
+    font-weight: normal;
+    min-height: 100px;
+    color:brown;
+    text-align: center;1
+}
+
+p {
+    font-size:14px;
+    text-align: right;
+    color:olive;
+}
+
+#name {
+    font-size:16px;
+}
+
+#title{
+    font-family: 'Mystery Quest', cursive;
+    font-weight: normal;
+}
+
+.submitBtn {
+    background:#000;
+    color:white;
+    border:none;
+    line-height: 2;
+    cursor:pointer;
+}
+
+.submitBtn:hover {
+    background:#333;
+}
+
+form {
+  padding: 50px;
+}
+
+input, select, textarea {
+  display: block;
+  margin-bottom: 10px;
+  padding: 5px;
+}

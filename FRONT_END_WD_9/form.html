@@ -1,0 +1,64 @@
+<html>
+
+<head>
+  <title>Greeting Card</title>
+  <link href="https://fonts.googleapis.com/css?family=Mystery+Quest|Passion+One|Permanent+Marker|Nunito" rel="stylesheet">
+  <link rel='stylesheet' href="form.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://rawgit.com/Razboy20/CodeWizards/master/assets/cookies.js"></script>
+
+
+</head>
+
+<body>
+  <h1>Make a Post Card</h1>
+  <div class='card'>
+    <div class='cardImage'></div>
+    <div class='cardContent'>
+      <h2 id='salutation'></h2>
+      <h3 id='messageText'></h3>
+      <p id='name'></p>
+      <p id='email'></p>
+    </div>
+  </div>
+
+  <form id='cardForm'>
+    <input type="email" id="senderEmail" placeholder="Recipient's email" required/>
+    <input type="text" id="senderName" placeholder="Your Name" required/>
+    <input type="text" id="receiverName" placeholder="Recipient's Name" required/>
+    <textarea id="message" placeholder="... Why ya reading dis... START DA WRIE" minlength="5" maxlength="120"></textarea>
+    <input type="submit" class="submitBtn" />
+  </form>
+
+
+  <script>
+    $('.card').hide();
+    var cookieCard = getCookie('card');
+    if (cookieCard) {
+      cookieCard = JSON.parse(cookieCard);
+      $('.card').show();
+      setCookie('card', '', -1);
+      $('#salutation').text('Hey ' + cookieCard.receiverName);
+      $('#messageText').text(cookieCard.message);
+      $('#name').text(cookieCard.senderName);
+      $('#email').text(cookieCard.senderEmail);
+      $('.card').show();
+      $('form').hide();
+    };
+
+
+    function submit(event) {
+      event.preventDefault();
+      var card = {};
+      card.senderEmail = $('#senderEmail').val();
+      card.senderName = $('#senderName').val();
+      card.receiverName = $('#receiverName').val();
+      card.message = $('#message').val();
+      setCookie('card', JSON.stringify(card), 1);
+      location.reload();
+    }
+    $('#cardForm').submit(submit);
+  </script>
+</body>
+
+</html>
