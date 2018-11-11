@@ -42,3 +42,9 @@ class Cat(Animal):
 
   def purr(self):
     print("<audio src='meow.mp3' autoplay></audio>")
+
+dog1 = Dog("Woofy", "56 pounds")
+cat1 = Cat("Kittens", "101 pounds")
+
+dog1.eat()
+cat1.purr()
