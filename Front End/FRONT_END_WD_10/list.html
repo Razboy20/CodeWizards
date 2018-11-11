@@ -1,0 +1,51 @@
+<html>
+
+<head>
+  <title>To do list</title>
+
+  <!-- Jquery is added here --->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Jquery UI is added here --->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Bubblegum+Sans|Passion+One" rel="stylesheet">
+  <link rel='stylesheet' href="style.css">
+</head>
+
+<body>
+  <h1>Write your tasks here</h1>
+  <!--
+           Exercise 1: Create form for adding tasks
+
+           Exercise 2: Create an empty ordered list
+
+           Exercise 3: Add items to list on form submit
+
+           Exercise 4: Style the list items using CSS combinators
+
+           Exercise 5: Make the list sortable
+          -->
+
+  <form>
+    <input type="text" id="todo" required>
+    <input type="submit">
+  </form>
+
+  <ol class="taskList">
+  </ol>
+
+  <script>
+    function add(event) {
+      event.preventDefault();
+      var thing = $('#todo').val();
+      $('.taskList').append(`<li>${thing}</li>`);
+      $('#todo').val('');
+    }
+    $('form').submit(add);
+    $('.taskList').sortable({axis:"y"});
+  </script>
+
+</body>
+
+</html>

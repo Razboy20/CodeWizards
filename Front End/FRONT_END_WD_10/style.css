@@ -1,0 +1,54 @@
+body {
+  background-image: url('bg.jpg');
+  font-family: 'Bubblegum Sans', cursive;
+}
+
+h1 {
+  text-align: center;
+  font-family: 'Passion One', cursive;
+  font-weight: normal;
+  color: #c0392b;
+  padding: 10px;
+  font-size: 48px;
+}
+
+form {
+  text-align: center;
+}
+
+input {
+  border-radius: 10px;
+  outline: none;
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 24px;
+}
+
+input[type="submit"] {
+  width:150px;
+  height: 50px;
+  cursor: pointer;
+  background-color: #c0392b;
+  color:white;
+}
+#todo {
+  width: 300px;
+  height: 50px;
+}
+
+.taskList {
+  width:500px;
+  margin: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  font-size: 28px;
+  border-radius: 5px;
+}
+
+.taskList > li{
+ padding:10px;
+ margin:15px;
+ box-shadow:1px 1px rgba(0,0,0,0.1);
+ border-radius:5px;
+ background-color:lightyellow;
+}

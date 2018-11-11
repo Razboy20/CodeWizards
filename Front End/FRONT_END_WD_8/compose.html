@@ -4,6 +4,7 @@
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia|Bubblegum+Sans" rel="stylesheet">
   <link rel='stylesheet' href="style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://rawgit.com/Razboy20/CodeWizards/master/assets/cookies.js"></script>
   <title>Compositions For Life</title>
 </head>
 
@@ -25,19 +26,13 @@
     <p>•</p>
   </div>
   <script>
-    /*
-            Exercise 1: Create an object containing id of audio tags.
 
-            Exercise 2: Play the drop audio when pressed any keyboard key.
+    //checking if instructions have been displayed or not
+    if(getCookie('instructions')) {
 
-            Exercise 3: Use bracket notation instead of dot notation.
-
-            Exercise 4: Change background color of page when audio is played.
-                        Also add box-shadow and border to the white circle.
-
-            Exercise 5: Change background color and other styles only when an audio is played.
-            */
-
+    } else {
+      setCookie();
+    };
     var playing = false;
     var i = 0;
     $('.recording').hide();

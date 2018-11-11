@@ -1,0 +1,304 @@
+<html>
+
+<head>
+  <title>Photo Editor</title>
+  <link rel='stylesheet' href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='https://connect.facebook.net/en_US/sdk.js'></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- Add following jquery UI script here
+             https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
+          -->
+
+
+  <link href="https://fonts.googleapis.com/css?family=Bubblegum+Sans|Lobster|Pacifico|Comfortaa" rel="stylesheet">
+</head>
+
+<body>
+
+  <img class='logo' src='camera.png'>
+  <h1>Photo Editor</h1>
+  <button class="preview-editor-btn" onclick="preview();">Preview</button>
+  <div class='container'>
+    <div class='tools' id='uploader'>
+      <h1>Choose a Dumb Photo</h1>
+      <label for="url">
+        <p>Upload photo:
+        <input type="text" id="url" class="textInput" placeholder="https://image.here">
+        <button class="uploadBtn">Upload</button><span class="error imglinkerror"></span>
+        </p>
+      </label>
+      <label for="searchurl">
+        <p>Search for Photo:
+        <input type="text" id="searchurl" class="textInput" placeholder="Image Name">
+        <button class="searchBtn">Search</button>
+        </p>
+      </label>
+      <p>Choose:</p>
+      <div class="searchResults">
+        <!--Where search results will be-->
+      </div>
+    </div>
+    <div class='tools' id='editor'>
+      <label for='text'>Enter the text:</label>
+      <input type='text' id='captionInput' class='textInput'>
+
+      <label for="fontSize">Font Size:</label>
+      <input type="number" id="fontSize" class="textInput">
+
+      <label for="color">Color:</label>
+      <input type="color" id="color">
+
+      <select id="font">
+        <option style="font-family:Lobster">Lobster</option>
+        <option style="font-family:Bubblegum Sans">Bubblegun Sans</option>
+        <option style="font-family:Comfortaa">Confortaa</option>
+      </select>
+
+
+      <!-- -->
+
+
+
+      <button class="textBtn">Add text</button>
+      <!-- -->
+
+      <h1>Choose a stupid Sticker</h1>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s1.png');" class="sticker"></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s2.png');" class="sticker"></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s3.png');" class="sticker"></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s4.png');" class="sticker"></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s5.png');" class="sticker"></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s6.png');" class="sticker">></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s7.png');" class="sticker">></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s8.png');" class="sticker">></div>
+      <div style="background-image:url('https://elies.codewizardshq.com/front_end_b_11/s9.png');" class="sticker">></div>
+      <h1 id="fbTitle">Download your Image!</h1>
+      <a id="downloadimage" onclick="downloadImage()" href="#">Download</a>
+    </div>
+    <div class='canvas'>
+      <img src='placeholder.png' alt="a Horrible Image which you should never have seen anyway." id='image' />
+      <p class="caption"></p>
+    </div>
+  </div>
+  <script>
+    ///////////PIXABAY LINKS////////////
+    var pixabayKey = "9039406-4b2d5803c1cb81b46006089c2";
+    var pixabayUrl = "https://pixabay.com/api?safesearch=true";
+    var fbKey = "182350225831698";
+    var res;
+    ///////////////////////////////////
+    //making sure image does not get moved
+    document.getElementById('image').ondragstart = function() {
+      return false;
+    };
+
+    function testImage(url, timeoutT) {
+      return new Promise(function(resolve, reject) {
+        var timeout = timeoutT || 5000;
+        var timer, img = new Image();
+        img.onerror = img.onabort = function() {
+          clearTimeout(timer);
+          reject("Not a photo / error");
+        };
+        img.onload = function() {
+          clearTimeout(timer);
+          resolve("success");
+        };
+        timer = setTimeout(function() {
+          // reset .src to invalid URL so it stops previous
+          // loading, but doesn't trigger new load
+          img.src = "//!!!!/test.jpg";
+          reject("Timed Out - Try again");
+        }, timeout);
+        img.src = url;
+      });
+    }
+
+    function searchImage() {
+      var searchUrl = $('#searchurl').val();
+
+      var params = {
+        key: pixabayKey,
+        min_width: "640px",
+        q: searchUrl,
+        orientation: 'horizontal'
+      }
+
+      $.ajax({
+          url: pixabayUrl,
+          type: 'GET',
+          data: params,
+        })
+        .done(function() {
+          console.log("Success - Found");
+        })
+        .fail(function() {
+          console.error("Oops! Something went wrong with pixabay api!");
+        })
+        .always(function(res) {
+          console.log("complete! - ");
+          console.log(res);
+          res = res;
+
+          $(".searchResults").html('');
+          var hits = res.hits;
+
+          for (var item of hits) {
+            var imageSrc = item.webformatURL;
+            var html = "<img class='thumb' src=" + imageSrc + ">"
+            $(".searchResults").append(html);
+          }
+          $(".thumb").click(pickImage);
+        });
+
+    }
+
+    $('.searchBtn').click(searchImage);
+
+    $('#editor').hide();
+    $('.preview-editor-btn').hide();
+
+    function addImage() {
+
+      var url = $("#url").val();
+      testImage(url, 2000)
+        .then(() => {
+          console.log("success in getting image");
+          $("#image").attr("src", url);
+          $("#uploader").hide();
+          $("#editor").fadeIn(1000);
+          $(".preview-editor-btn").fadeIn(1000);
+        })
+        .catch((e) => {
+          console.error("image is not an image/or -- " + e);
+          $(".imglinkerror").html(e);
+          return;
+        });
+
+    }
+    $('.uploadBtn').click(addImage);
+
+    function pickImage() {
+      var url = $(this)[0].src;
+      $('#image').attr('src', url);
+      $('#uploader').hide();
+      $('#editor').fadeIn(1000);
+      $(".preview-editor-btn").fadeIn(1000);
+    }
+    $('.imageInput').click(pickImage);
+
+    function addText() {
+      var caption = $('#captionInput').val();
+      $('.caption').text(caption);
+      var size = $("#fontSize").val() || 50;
+      var font = $("#font").val();
+      var color = $("#color").val();
+      var textCSS = {
+        'font-size': size,
+        'margin': '-10px 0px -10px',
+        'font-family': font,
+        'color': color
+      }
+      $('.caption').css(textCSS);
+      $('.caption').draggable({
+        cursor: "crosshair",
+        containment: ".canvas",
+        opacity: 0.7
+      });
+
+
+    }
+
+    function addSticker() {
+      var sticker = $(this).css('background-image');
+      sticker.replace(/"/g, "'")
+      // <img src='${sticker}' class="canvasSticker">
+      $('.canvas').append(`<div style="background-image:url(${sticker}); background-repeat:no-repeat; width:64px; height:64px;" class="canvasSticker"></div>`);
+      $('.canvasSticker').draggable({
+        cursor: "crosshair",
+        containment: ".canvas",
+        opacity: 0.7
+      });
+    }
+    $(".sticker").click(addSticker);
+
+
+
+    $('.textBtn').click(addText);
+
+    /*function preview() {
+      if ($(".preview-editor-btn").html() == "Preview") {
+        $("#editor").hide();
+        $(".canvas").css({
+          'width': '650px'
+        });
+        $(".preview-editor-btn").html("Show Editor");
+      } else {
+        $("#editor").show();
+        $(".canvas").css({
+          'width': '650px'
+        });
+        $(".preview-editor-btn").html("Preview");
+      }
+    }*/
+
+    var data = "data:image/svg+xml," +
+      "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>" +
+      "<foreignObject width='100%' height='100%'>" +
+      "<div xmlns='http://www.w3.org/1999/xhtml' style='font-size:12px'>" +
+      "<ul> <li style='color:red'> hello </li>  <li style='color:green'>test</li> </ul> " +
+      "</div>" +
+      "</foreignObject>" +
+      "</svg>";
+
+    var img = new Image();
+    img.src = data;
+
+    function preview() {
+      if ($(".preview-editor-btn").html() == "Preview") {
+        $("#editor").hide();
+        $(".canvas").hide();
+        $("#realcanvas").show();
+        $(".preview-editor-btn").html("Show Editor");
+      } else {
+        $("#editor").show();
+        $(".canvas").show();
+        $("#realcanvas").hide();
+        $(".preview-editor-btn").html("Preview");
+      }
+    }
+    var data;
+
+    function downloadImage() {
+      data = "data:image/svg+xml," +
+        "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>" +
+        "<foreignObject width='100%' height='100%'>" +
+        "<div xmlns='http://www.w3.org/1999/xhtml' style='font-size:12px'>" +
+        $(".canvas")[0].innerHTML +
+        "</div>" +
+        "</foreignObject>" +
+        "</svg>";
+      //$("#downloadimage")[0].href = data;
+      var image = new Image();
+      image.src = data;
+
+
+      image.onload = function() {
+        var canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+        var context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0);
+
+        var a = document.createElement('a');
+        a.download = "image.png";
+        a.href = canvas.toDataURL('image/png');
+        document.body.appendChild(a);
+        a.click();
+      }
+    }
+  </script>
+</body>
+
+</html>

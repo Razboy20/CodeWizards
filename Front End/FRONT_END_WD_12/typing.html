@@ -1,0 +1,114 @@
+<html>
+
+<head>
+  <title>Typing</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Bevan" rel="stylesheet">
+  <script src="words.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Acme" rel="stylesheet">
+  <script src="words.js"></script>
+  <link rel='stylesheet' href="style.css">
+</head>
+
+<body>
+  <!--
+           Exercise 6: Create form for submitting name
+
+           Exercise 7: Start the typing race on form submit
+
+           Exercise 8: Add scoreboard in badge
+
+           Exercise 9: Show previous scores in scoreboard
+
+           Exercise 10: Restart race on clicking Another Race button
+          -->
+  <h1>Type Racing</h1>
+  <!-- <p class='wordCount'>0</p> -->
+  <div class="container">
+    <div class='typer'>
+      <p id='word'></p>
+      <input type='text' id="inputWord">
+    </div>
+    <div class='badge'>
+      <p id='name'>Name: Codewizad</p>
+      <p id='wpm'>Speed: 0wpm</p>
+      <div class='scoreboard'></div>
+      <button id="restart">Another Race</button>
+    </div>
+    <form class="infoForm">
+      <input type='text' id='nameInput' placeholder='Enter Name Here'>
+      <input type='submit' id='startBtn'>
+    </form>
+  </div>
+  <script>
+    $('.typer').hide();
+    $('.badge').hide();
+    var words = givenArray;
+    $('#word').text(words[0]);
+
+    var name;
+    var scoreboard = [];
+    var startTime = false;
+    var oldWrite = 0;
+    var newWrite = 0;
+
+    function checkWord() {
+      var testWord = $("#word").text();
+      var youWrote = $("#inputWord").val();
+      if (youWrote.length > oldWrite) oldWrite = youWrote.length;
+
+      if (youWrote.slice(0, testWord.length) === testWord) {
+        var index = words.indexOf(testWord);
+        var random = Math.floor(Math.random() * words.length);
+        words.splice(index, 1);
+        $("#word").text(words[random]);
+        $("#inputWord").val("");
+        newWrite = newWrite + oldWrite;
+        oldWrite = 0;
+      }
+      if (startTime === false) startTime = new Date().getTime();
+    }
+
+    function start(event) {
+      event.preventDefault();
+      setTimeout(timeOver, 20000);
+      $('#word').text(words[0]);
+      name = $("#nameInput").val();
+      $('#name').text(name);
+      $('.typer').show();
+      $('.infoForm').hide();
+      $('#inputWord').focus();
+      //setup new word
+      var index = words.indexOf(testWord);
+      var random = Math.floor(Math.random() * words.length);
+      words.splice(index, 1);
+      $("#word").text(words[random]);
+    }
+
+    $('.infoForm').submit(start);
+
+
+    function timeOver() {
+      $("#inputWord").hide();
+      newTime = new Date().getTime();
+      newWrite = newWrite + oldWrite;
+      WPM = (newWrite / 5) / ((newTime - startTime) / 55000);
+      $('.typer').hide();
+      $('#wpm').text("Speed: " + Math.round(WPM) + "WPM");
+      $('.badge').show();
+      scoreboard.push(obj);
+
+      $('.scoreboard').html('');
+      for (i = 0; i < scoreboard.length; i++) {
+        var html = '<p>' + scoreboard[i].name + ':' + scoreboard[i].speed + '</p>';
+        $('.scoreboard').append(html);
+      }
+    }
+
+
+    $(function() {
+      $('#inputWord').keyup(checkWord);
+    });
+  </script>
+</body>
