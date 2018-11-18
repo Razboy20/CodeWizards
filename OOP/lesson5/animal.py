@@ -26,7 +26,7 @@ class Animal:
     self.name = ""
     self.weight = ""
   def eat(self):
-    print(self.name + "is eating now...")
+    print(self.name + " is eating now...")
 
 class Dog(Animal):
   def bark(self):
