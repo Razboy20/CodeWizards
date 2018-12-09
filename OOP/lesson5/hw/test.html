@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Please Answer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled/html5/native.history.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+  <style media="screen">
+    .center {
+        left:50%;
+        top:50%;
+        transform:translate(-50%,-50%);
+        position:absolute;
+      }
+      input {
+        border-radius: 3px;
+        width:400px;
+        height:50px;
+        font-size:35px;
+        font-family:monospace;
+      }
+
+      p {
+        font-size:35px;
+        font-family:sans-serif;
+      }
+
+      button {
+        font-size: 30px;
+        height:50px;
+      }
+
+      .centerabove {
+        top: calc(50% - 100px);
+      }
+      .centerbelow {
+        top: calc(50% + 100px);
+      }
+    </style>
+</head>
+
+<body>
+  <input type="text" id="namea" class="center">
+  <p class="centerabove center" id="nameb">Please Enter YOUR Name</p>
+  <button type="button" name="button" id="namebutton" class="centerbelow center">Continue</button>
+
+
+  <!-- Checking names... -->
+  <script type="text/javascript">
+    let names = {
+      "input": $("#namea"),
+      "p": $("#nameb"),
+      "button": $("#namebutton"),
+      "name1": "",
+      "name2": ""
+    };
+    let i = 0;
+    names.button.click(function() {
+      if (i === 0) {
+        names.name1 = names.input.val().toUpperCase();
+        names.input.val("");
+        names.p.text("Please Enter MY Name")
+      } else if (i === 1) {
+        names.name2 = names.input.val().toUpperCase();
+        names.input.hide()
+        names.button.hide()
+        decrypted = CryptoJS.AES.decrypt(
+          "U2FsdGVkX1+WW0lgqQOZpvqLpISP2e4N/CeN1DQAU6BQIBWD+5KhV62HEchof1gescpb9RXYrqpri7sPcbe4MBn5sPpoMcYhiXQ0EACkIDoQ2f/Tu7mkUZbP43EJMaa+vqA3Y2AFM7OEYHW5bIqynf7BNz3bEV8wnyZJPc9wVCdDqR/ezTpn8tCgrbPeg+3EOsxSSDBupo7tcaic+9aI0YZcF7iEv8xUKVea+202ahyOn2ghCJimrhvxvejZH7dWjHJEqSyEaZbzTYlbhC9/KgOtQRjqLC018I0czJtfNSWFvXXeXRcVO+GRRGlUZhPfO8aSh/ALkLSbR6AXuPaSVnrUxZwEoJD01LOIJNJeqA9V7aJ0duToy5dSJqWiuLwcmN15u4qEPr2MlT2hXdIvUEyYd8RYtCXOa8xE1lRZzON7Zsq8NWLbTTD/VPnaYCLoWfkxA61T/PU7fyk9W0VIafNbLTlZTh8EkR1GRuJUjGz7nPjrBpn54nreJ1J9DbJQmtMM1cH55yzALbuY9kt4NSmkW8gpnaARl5QIMQflYv0=",
+          names.name1 + names.name2);
+
+        //checking if valid...
+        try {
+          let decrypttext = decrypted.toString(CryptoJS.enc.Utf8)
+          names.p.text(decrypttext);
+        } catch (e) {
+          names.p.text("Wrong Answer. Try Again.")
+        }
+
+      };
+      i++
+    });
+  </script>
+</body>
+
+</html>
