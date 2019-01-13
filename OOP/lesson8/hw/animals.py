@@ -42,5 +42,11 @@ class TerrestrialAnimals:
     print("<p>I can walk!</p>")
     print("<img src=" + self.walkImage + ">")
 
-class Amphibians:
-  
+class Amphibians(AquaticAnimals,TerrestrialAnimals):
+  def __init__(self, swimImage, walkImage):
+    self.swimImage = swimImage;
+    self.walkImage = walkImage;
+
+turtle = Amphibians('swimming.gif', 'walking.gif')
+turtle.swim()
+turtle.walk()

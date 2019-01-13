@@ -29,8 +29,20 @@ class Algebra(ABC):
     self.table = table
 
   @abstractmethod
-  def execute:
+  def execute():
     pass
 
 
-  class Sum
+class Average(Algebra):
+  def __init__(self, table):
+    super().__init__(table)
+
+  def execute(self):
+    _sum = 0
+    for item in self.table:
+      _sum+=item
+    ouput = _sum/self.table.length
+    return(output)
+
+average = Average([5, 1, 10])
+print(average.execute())
