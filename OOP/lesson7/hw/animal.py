@@ -14,47 +14,48 @@ cgitb.enable()
 # Send the name while creating objects of any class Dogs, Cats, Fox
 #
 ########### H O M E W O R K - II ##########
-# 
+#
 # Create a constructor method inside the Dogs class with three parameters
 #   - self
 #   - name
 #   - breed
 #
 # Inside that method, set the instance attribute breed to given parameter
-# 
+#
 # Call the constructor method of parent class Animals using super
 # Don't forget to send the name attribute alongwith it.
 #
 ########################################
 
-class Animals:
-  def __init__(self):
-    self.name = ""
-    self.weight = ""
-    
-  def eat(self):
-    print("<p>",self.name, 'is eating now..', "</p>")
-    
-class Dogs(Animals):
-  def speak(self):
-    print("<audio src=woof.mp3 autoplay></audio>")
-    
-class Cats(Animals):
-  def speak(self):
-    print("<audio src=meow.mp3 autoplay></audio>")
-    
-class Fox(Animals):
-  def speak(self):
-    print("<audio src=blah.mp3 autoplay></audio>")
-    
-dog1 = Dogs()
-dog1.name = "Shelby"
-cat1 = Cats()
-cat1.name = "Charlie"
-foxy = Fox()
-foxy.speak()
+class Animal:
+  def __init__(self, name, weight):
+    self.name = name
+    self.weight = weight
 
-dog1.speak()
-cat1.speak()
+  def eat(self):
+    self.weight = self.weight+10
+    print(self.name + "is eating now... He is now "+self.weight+" pounds.")
+
+  def info(self):
+    print(self.name+" is a "+self.__class__.__name__+" who weighs "+self.weight+" pounds.")
+
+
+class Dog(Animal):
+  def __init__(self, name, weight):
+    Animal.__init__(name, weight)
+
+  def bark(self):
+    print("<audio src='woof.mp3' autoplay></audio>")
+
+class Cat(Animal):
+  def __init__(self, name, weight):
+    Animal.__init__(name, weight)
+
+  def purr(self):
+    print("<audio src='meow.mp3' autoplay></audio>")
+
+dog1 = Dog("Woofy", 56)
+cat1 = Cat("Kittens", 101)
+
 dog1.eat()
-cat1.eat()
+cat1.purr()
