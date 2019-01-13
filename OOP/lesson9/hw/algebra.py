@@ -6,6 +6,7 @@ import cgitb
 cgitb.enable()
 
 from abc import ABC, abstractmethod
+import statistics
 
 ########### H O M E W O R K ###########
 # Create an abstract class Algebra
@@ -41,8 +42,34 @@ class Average(Algebra):
     _sum = 0
     for item in self.table:
       _sum+=item
-    ouput = _sum/self.table.length
+    # print(_sum/len(self.table))
+    output = _sum/len(self.table)
+    return(output)
+
+class Median(Algebra):
+  def __init__(self, table):
+    super().__init__(table)
+
+  def execute(self):
+    output = statistics.median(self.table)
+    return(output)
+
+class Mode(Algebra):
+  def __init__(self, table):
+    super().__init__(table)
+
+  def execute(self):
+    try:
+      output = statistics.mode(self.table)
+    except:
+      output = False
     return(output)
 
 average = Average([5, 1, 10])
 print(average.execute())
+
+median = Median([5, 1, 10])
+print(median.execute())
+
+mode = Mode([5, 1, 10])
+print(mode.execute())
