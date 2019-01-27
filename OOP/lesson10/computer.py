@@ -19,8 +19,8 @@ class Keyboard():
 
 class Monitor():
   def __init__(self, width, height):
-    self.size = size
-    self.resolution = resolution
+    self.width = width
+    self.height = height
 
   def play(self, video):
     print(f"<video src={video} controls></video>")
