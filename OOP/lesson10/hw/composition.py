@@ -13,11 +13,16 @@ cgitb.enable()
 # - Create a separate class for Computer, Coffee Mug and Pen holder with it's attributes and methods.
 #
 # - Create a class Table and use Composition to link all the above things together.
-# 
+#
 # - Run the methods of above classes using the Table object.
 #
 # But if you have any other example in your mind, you can implement that as well.
 #
 ########################################
 
+class Computer():
+  def __init__(self, brand):
+    self.brand = brand
 
+  def printBrand(self):
+    print(f"Brandname: {self.brand}")
