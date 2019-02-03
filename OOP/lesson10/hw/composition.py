@@ -26,3 +26,17 @@ class Computer():
 
   def printBrand(self):
     print(f"Brandname: {self.brand}")
+
+class CoffeeMug():
+  def __init__(self, brand):
+    self.brand = brand
+
+  def printBrand(self):
+    print(f"Brandname: {self.brand}")
+
+class Books():
+  def __init__(self, brand):
+    self.brand = brand
+
+  def printBrand(self):
+    print(f"Brandname: {self.brand}")
