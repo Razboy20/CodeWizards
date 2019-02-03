@@ -46,11 +46,11 @@ class Playground():
     totalPlayers = len(self.players)
     totalEnemies = len(self.opponents)
     if(totalPlayers > totalEnemies):
-      print("You won!!")
+      print("You won!! Replaying in 2 seconds... <meta http-equiv='refresh' content='2'; URL='#' />")
     elif(totalPlayers < totalEnemies):
-      print("You lose!")
+      print("You lose! Replaying in 2 seconds... <meta http-equiv='refresh' content='2'; URL='#' />")
     else:
-      print("It's a draw, refresh to play again")
+      print("It's a draw, replaying in 2 seconds... <meta http-equiv='refresh' content='2'; URL='#' />")
 
 myGame = Playground('arena.png')
 myGame.setTitle('VS game')
